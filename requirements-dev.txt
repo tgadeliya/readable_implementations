@@ -1,0 +1,6 @@
+# basic packages
+torch
+# utils
+pytest==6.2.3
+
+
