@@ -23,17 +23,13 @@ class Embeddings(Module):
         max_len = max(lens)
         bs = len(x)
 
-        print(lens, max_len, bs)
-
         # TensorType("batch", "max_len", "d_model")
         x_emb = torch.zeros(
             size=(bs, max_len, self.d_emb)
         )
-        print("X_EMB", x_emb.size())
-
+        
         for i in range(bs):
             # TODO: Get rid of transposition
-            print(i, self.emb_matrix[x[i], :].size(), self.get_pe(lens[i]).T.size())
             x_emb_i = self.emb_matrix[x[i], :] + self.get_pe(lens[i]).T
             x_emb[i, : lens[i], :] = x_emb_i
 
