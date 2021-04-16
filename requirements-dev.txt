@@ -1,6 +1,10 @@
 # basic packages
-torch
+torch==1.8.1
+
 # utils
+black==20.8b1
+mypy==0.812
+torchtyping==0.1.1
 pytest==6.2.3
 
 
