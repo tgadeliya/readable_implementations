@@ -14,6 +14,7 @@ class TransformerFeedForward(Module):
         self.out_dim = out_dim
         self.lin1 = Linear(in_dim, hidden)
         self.lin2 = Linear(hidden, out_dim)
+        self.ReLU = ReLU()
 
     def forward(self, x):
         x = self.lin1(x)
@@ -42,13 +43,13 @@ class Linear(Module):
         x += self.bias
         return x
 
-
+torch.nn.ReLU
 class ReLU(Module):
     def __init__(self):
         super().__init__()
 
     def forward(self, x):
-        return torch.max(0, x)
+        return torch.clamp(x, min=0)
 
 
 class LayerNorm(Module):
