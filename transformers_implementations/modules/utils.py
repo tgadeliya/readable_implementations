@@ -42,8 +42,7 @@ class Linear(Module):
         x = torch.matmul(x, self.weight)
         x += self.bias
         return x
-
-torch.nn.ReLU
+        
 class ReLU(Module):
     def __init__(self):
         super().__init__()
