@@ -24,10 +24,8 @@ class Embeddings(Module):
         bs = len(x)
 
         # TensorType("batch", "max_len", "d_model")
-        x_emb = torch.zeros(
-            size=(bs, max_len, self.d_emb)
-        )
-        
+        x_emb = torch.zeros(size=(bs, max_len, self.d_emb))
+
         for i in range(bs):
             # TODO: Get rid of transposition
             x_emb_i = self.emb_matrix[x[i], :] + self.get_pe(lens[i]).T
@@ -40,10 +38,8 @@ class Embeddings(Module):
         return self.pos_enc_max[:, :inp_len]
 
     @staticmethod
-    def precompute_pe(
-        max_model_len: int, d_emb: int
-    ):
-        # TensorType("d_emb", "max_model_len") 
+    def precompute_pe(max_model_len: int, d_emb: int):
+        # TensorType("d_emb", "max_model_len")
         pos_arg = torch.arange(0, max_model_len)
         dim_arg = 10000 ** (torch.div(torch.arange(0, d_emb), 2.0) / d_emb).reshape(
             -1, 1
