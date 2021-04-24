@@ -85,7 +85,8 @@ def test_encoder_attention():
         n_heads = n_heads,
         d_key = d_model ,
         d_value = d_model,
-        is_masked = False) 
+        max_len = max_len,
+        is_masked = True) 
     out = mha(x)
     print("MHA: ", out)
     print("T MHA: ", torch_mha(x,x,x)[0])
