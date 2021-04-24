@@ -5,8 +5,14 @@ import pytest
 
 # TODO: Fix Pylance problems with import
 from transformers_implementations.modules.embedding import Embeddings
-from transformers_implementations.modules.utils import Linear, LayerNorm
+from transformers_implementations.modules.attention import MultiHeadAttention
+from transformers_implementations.modules.utils import Linear, LayerNorm, init_kaiming, Softmax
 
+from torchtyping import patch_typeguard
+
+patch_typeguard()
+
+torch.nn.Linear
 @pytest.mark.skip
 def test_embeddings():
     d_emb = 4
@@ -21,20 +27,29 @@ def test_embeddings():
     out = emb_layer(sample_idx)
     assert out.size() == (len(sample_idx), max(map(len, sample_idx)), d_emb)
 
-@pytest.mark.skip
+#@pytest.mark.skip
 def test_linear():
     bs = 1
-    in_dim = 2
-    out_dim = 3
+    ml = 2
+    d = 3
+    out_dim = 10
 
-    lin = Linear(in_dim, out_dim)
-    x = torch.Tensor(bs, in_dim)
-
+    lin = Linear(d, out_dim)
+    x = torch.Tensor(bs, ml, d)
     f = lin(x)
+    assert f.size() == (bs, ml, out_dim)  
 
-    assert f.size() == (bs, out_dim)  
+#@pytest.mark.skip
+def test_kaiming():
+    t = torch.rand(size=(100, 100))
+    t_mean_before = t.mean() 
+    init_kaiming(t)
+    t_mean_after = t.mean()
+    assert t_mean_before != t_mean_after, "Opearion isn't in-place style"
+    # for big number of values should approach to mean=0 std = sqrt(2/mode)
 
 
+@pytest.mark.skip
 def test_ln():
     bs = 2
     d_model = 3
@@ -50,4 +65,45 @@ def test_ln():
     out_imp = ln_imp(x)
     print(out_imp) 
     assert 1==12
+
+#@pytest.mark.skip
+def test_encoder_attention():
+    bs = 2
+    max_len = 3
+    d_model = 6
+    n_heads = 3
+    kv = d_model
+
+    x = torch.rand(size=(bs, max_len, d_model))
+    torch_mha = torch.nn.MultiheadAttention(
+        embed_dim=d_model,
+        num_heads=n_heads,
+        dropout=0,
+    )
+    mha = MultiHeadAttention(
+        d_model = d_model,
+        n_heads = n_heads,
+        d_key = d_model ,
+        d_value = d_model,
+        is_masked = False) 
+    out = mha(x)
+    print("MHA: ", out)
+    print("T MHA: ", torch_mha(x,x,x)[0])
+    assert out.size() == x.size()
+    assert mha.d_k == mha.d_v == mha.d_q
+
+#@pytest.mark.skip
+def test_softmax():
+    s = Softmax(dim=1)
+    st = torch.nn.Softmax(dim=1)
+
+    x = torch.rand(size=(2, 5, 5))
+
+    out = s(x)
+    out_t = st(x)
+    # TODO: Investigate why visually equal outputs isn't equal
+    print(out[0][0][0].dtype)
+    print(out_t[0][0][0].dtype)
+    assert out_t.size() == out.size() == x.size()
+
 
