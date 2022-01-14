@@ -1,6 +1,5 @@
 import torch
 from torch.nn import Module
-from torchtyping import TensorType  # ignore
 from readable_implementations.modules.utils import Linear, Softmax
 
 

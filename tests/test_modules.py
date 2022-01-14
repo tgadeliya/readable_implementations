@@ -8,9 +8,8 @@ from readable_implementations.modules.embedding import Embeddings
 from readable_implementations.modules.attention import MultiHeadAttention
 from readable_implementations.modules.utils import Linear, LayerNorm, init_kaiming, Softmax
 
-from torchtyping import patch_typeguard
 
-patch_typeguard()
+
 
 torch.nn.Linear
 @pytest.mark.skip

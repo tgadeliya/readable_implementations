@@ -1,5 +1,4 @@
 import typing as T
-from torchtyping import TensorType  # type: ignore
 
 import torch
 from torch.nn import Module
