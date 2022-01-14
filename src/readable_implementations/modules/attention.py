@@ -30,7 +30,7 @@ class MultiHeadAttention(Module):
         self.Q_proj = Linear(d_model, self.d_q * self.n_heads)
         self.V_proj = Linear(d_model, self.d_v * self.n_heads)
 
-        self.scaling_factor = torch.sqrt(torch.tensor(self.d_k))
+        self.scaling_factor = torch.sqrt(torch.tensor(self.d_k, dtype=torch.float32))
 
         self.softmax = Softmax(dim=-1)
         self.final_linear = Linear(self.d_v * self.n_heads, d_model)

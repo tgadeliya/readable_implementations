@@ -8,11 +8,7 @@ from readable_implementations.modules.embedding import Embeddings
 from readable_implementations.modules.attention import MultiHeadAttention
 from readable_implementations.modules.utils import Linear, LayerNorm, init_kaiming, Softmax
 
-
-
-
-torch.nn.Linear
-@pytest.mark.skip
+# @pytest.mark.skip
 def test_embeddings():
     d_emb = 4
     vocab_size = 10
@@ -26,7 +22,7 @@ def test_embeddings():
     out = emb_layer(sample_idx)
     assert out.size() == (len(sample_idx), max(map(len, sample_idx)), d_emb)
 
-#@pytest.mark.skip
+# @pytest.mark.skip
 def test_linear():
     bs = 1
     ml = 2
@@ -38,7 +34,7 @@ def test_linear():
     f = lin(x)
     assert f.size() == (bs, ml, out_dim)  
 
-#@pytest.mark.skip
+# @pytest.mark.skip
 def test_kaiming():
     t = torch.rand(size=(100, 100))
     t_mean_before = t.mean() 
@@ -48,7 +44,7 @@ def test_kaiming():
     # for big number of values should approach to mean=0 std = sqrt(2/mode)
 
 
-@pytest.mark.skip
+#@pytest.mark.skip
 def test_ln():
     bs = 2
     d_model = 3
@@ -62,8 +58,8 @@ def test_ln():
 
     ln_imp = LayerNorm()
     out_imp = ln_imp(x)
-    print(out_imp) 
-    assert 1==12
+
+    assert torch.allclose(out, out_imp)
 
 #@pytest.mark.skip
 def test_encoder_attention():
@@ -73,7 +69,7 @@ def test_encoder_attention():
     n_heads = 3
     kv = d_model
 
-    x = torch.rand(size=(bs, max_len, d_model))
+    x = torch.rand(size=(bs, max_len, d_model), dtype=torch.float32)
     torch_mha = torch.nn.MultiheadAttention(
         embed_dim=d_model,
         num_heads=n_heads,

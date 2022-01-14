@@ -20,7 +20,7 @@ class Embeddings(Module):
     def forward(self, x: T.List[T.List[int]]) -> torch.Tensor:
         lens = [len(l) for l in x]
         # TODO: Understand whether we pad up to maximal model len or batch len
-        max_len = self.max_model_len  # max(lens)
+        max_len = min(self.max_model_len, max(lens))
         bs = len(x)
 
         x_emb = torch.zeros(size=(bs, max_len, self.d_emb))
