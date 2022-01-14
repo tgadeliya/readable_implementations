@@ -1,2 +1,7 @@
-./res/data/*
+
+# Package stuff
+*.egg-info
 ./build/*
+
+# Local data for datasets
+./res/data/*
