@@ -20,10 +20,9 @@ class Embeddings(Module):
     def forward(self, x: T.List[T.List[int]]) -> torch.Tensor:
         lens = [len(l) for l in x]
         # TODO: Understand whether we pad up to maximal model len or batch len
-        max_len = self.max_model_len # max(lens)
+        max_len = self.max_model_len  # max(lens)
         bs = len(x)
 
-        # TensorType("batch", "max_len", "d_model")
         x_emb = torch.zeros(size=(bs, max_len, self.d_emb))
 
         for i in range(bs):
@@ -39,7 +38,6 @@ class Embeddings(Module):
 
     @staticmethod
     def precompute_pe(max_model_len: int, d_emb: int):
-        # TensorType("d_emb", "max_model_len")
         pos_arg = torch.arange(0, max_model_len)
         dim_arg = 10000 ** (torch.div(torch.arange(0, d_emb), 2.0) / d_emb).reshape(
             -1, 1

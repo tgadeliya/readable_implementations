@@ -40,24 +40,22 @@ class MultiHeadAttention(Module):
         # We don't want to optimize mask
         self.register_buffer("mask", attention_mask)
 
-    def forward(
-        self, x: TensorType["batch", "max_len", "d_model"]
-    ) -> TensorType["batch", "max_len", "d_model"]:
+    def forward(self, x):
 
         bs, max_len, d_model = x.size()
         assert d_model == self.d_model, "Input emb and attention emb aren't compatible"
 
-        Q: TensorType["batch", "n_heads", "max_len", "d_k"] = (
+        Q = (
             self.Q_proj(x).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
         )
-        K: TensorType["batch", "n_heads", "max_len", "d_k"] = (
+        K = (
             self.K_proj(x).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
         )
-        V: TensorType["batch", "n_heads", "max_len", "d_v"] = (
+        V = (
             self.V_proj(x).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
         )
 
-        Q_K: TensorType["batch", "n_heads", "max_len", "max_len"] = torch.matmul(
+        Q_K = torch.matmul(
             Q, torch.transpose(K, -1, -2)
         )
         # scale
@@ -68,9 +66,9 @@ class MultiHeadAttention(Module):
             Q_K.masked_fill_(self.mask, float("-inf"))
 
         # softmax
-        scores: TensorType["batch", "n_heads", "max_len", "max_len"] = self.softmax(Q_K)
+        scores = self.softmax(Q_K)
         # multiply V by scores
-        attention_by_heads: TensorType["batch", "n_heads", "max_len", "d_v"] = torch.matmul(scores, V)
-        concatenated_heads: TensorType["batch", "max_len", "d_v * n_heads"] = attention_by_heads.view(bs, max_len, -1)
-        output_attention: TensorType["batch", "max_len", "d_model"] = self.final_linear(concatenated_heads)
+        attention_by_heads = torch.matmul(scores, V)
+        concatenated_heads = attention_by_heads.view(bs, max_len, -1)
+        output_attention = self.final_linear(concatenated_heads)
         return output_attention
