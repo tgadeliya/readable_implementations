@@ -89,7 +89,7 @@ def init_kaiming(t, mode="fan_in"):
     fan_in = t.size()[0]
     fan_out = 1 if len(t.size()) == 1 else t.size()[1]
     assert mode in ["fan_in", "fan_out"], f"Mode {mode} is a wrong type!"
-    fan =  fan_in if mode == "fan_in" else fan_out
+    fan = fan_in if mode == "fan_in" else fan_out
     gain = math.sqrt(2.0) # ReLU case
     with torch.no_grad():
         return t.normal_(0, gain/math.sqrt(fan))
