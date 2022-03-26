@@ -36,7 +36,7 @@ class MultiHeadAttention(Module):
         self.final_linear = Linear(self.d_v * self.n_heads, d_model)
 
         # TODO: Why we can't precalculate mask on every step instead of max_len
-        attention_mask = torch.triu(torch.ones(max_len,max_len), diagonal=1)
+        attention_mask = torch.triu(torch.ones(max_len, max_len), diagonal=1)
         # We don't want to optimize mask
         self.register_buffer("mask", attention_mask)
 
@@ -45,19 +45,11 @@ class MultiHeadAttention(Module):
         bs, max_len, d_model = x.size()
         assert d_model == self.d_model, "Input emb and attention emb aren't compatible"
 
-        Q = (
-            self.Q_proj(x).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
-        )
-        K = (
-            self.K_proj(x).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
-        )
-        V = (
-            self.V_proj(x).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
-        )
+        Q = self.Q_proj(x).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
+        K = self.K_proj(x).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
+        V = self.V_proj(x).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
 
-        Q_K = torch.matmul(
-            Q, torch.transpose(K, -1, -2)
-        )
+        Q_K = torch.matmul(Q, torch.transpose(K, -1, -2))
         # scale
         Q_K = Q_K / self.scaling_factor
         # add masked attention
