@@ -30,7 +30,7 @@ class Linear(Module):
         self.out_dim = out_dim
         self.weight = Parameter(torch.Tensor(in_dim, out_dim))
         self.bias = Parameter(torch.Tensor(out_dim))
-        
+
         if initialization == "kaiming":
             init_kaiming(self.weight)
             init_kaiming(self.bias)
@@ -42,7 +42,11 @@ class Linear(Module):
         x = torch.matmul(x, self.weight)
         x += self.bias
         return x
-        
+
+
+# TODO: Add GELU
+
+
 class ReLU(Module):
     def __init__(self):
         super().__init__()
@@ -79,7 +83,6 @@ class Softmax(Module):
         return x
 
 
-
 def init_kaiming(t, mode="fan_in"):
     """
     Initilize input tensor with two assumptions:
@@ -90,6 +93,6 @@ def init_kaiming(t, mode="fan_in"):
     fan_out = 1 if len(t.size()) == 1 else t.size()[1]
     assert mode in ["fan_in", "fan_out"], f"Mode {mode} is a wrong type!"
     fan = fan_in if mode == "fan_in" else fan_out
-    gain = math.sqrt(2.0) # ReLU case
+    gain = math.sqrt(2.0)  # ReLU case
     with torch.no_grad():
-        return t.normal_(0, gain/math.sqrt(fan))
+        return t.normal_(0, gain / math.sqrt(fan))
