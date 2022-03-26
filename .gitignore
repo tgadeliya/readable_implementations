@@ -5,3 +5,6 @@
 
 # Local data for datasets
 ./res/data/*
+
+# Notebook for fast and dirty code checks
+experiment_notebook.ipynb
