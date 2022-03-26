@@ -10,7 +10,7 @@ OUTPUT_DIR_DEFAULT = os.path.join(CURRENT_DIR, "../../../res/data")
 def cifar10_downloader():
     CIFAR10_TAR_URL = "http://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz"
     dir_name = OUTPUT_DIR_DEFAULT
-    output_file_path = os.path.join(dir_name, 'cifar-10-python.tar.gz')
+    output_file_path = os.path.join(dir_name, "cifar-10-python.tar.gz")
 
     pathlib.Path(dir_name).mkdir(exist_ok=True)
 
@@ -28,9 +28,8 @@ def cifar10_downloader():
 
     print("LOL")
 
-AVAILABLE_DATASETS_DOWNLOADER = {
-    "cifar10": cifar10_downloader
-}
+
+AVAILABLE_DATASETS_DOWNLOADER = {"cifar10": cifar10_downloader}
 
 
 def download_dataset(dataset_name: str) -> None:
@@ -41,5 +40,5 @@ def download_dataset(dataset_name: str) -> None:
         KeyError(f"Downloader for {dataset_name} is not implemented")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cifar10_downloader()

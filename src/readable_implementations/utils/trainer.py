@@ -1,6 +1,7 @@
 import torch
 from readable_implementations.utils.config import BasicConfig
 
+
 class Trainer:
     def __init__(self, config: BasicConfig) -> None:
         self.config = config
@@ -40,10 +41,7 @@ class Trainer:
         val_loss = 0.0
         for batch in self.val_dataloader:
             with torch.no_grad():  # TODO: Whether it should be here
-                out = self.model(
-                    src = batch["src"],
-                    tgt = batch["tgt"]
-                )
+                out = self.model(src=batch["src"], tgt=batch["tgt"])
                 loss = self.loss_fn(out, target)
                 val_loss += loss.item()
 
