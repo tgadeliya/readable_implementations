@@ -37,15 +37,10 @@ class TransformerEncoderBlock(Module):
         self.LayerNorm2 = LayerNorm(d_model=ff_hidden_size)
 
     def forward(self, x):
-        print("X: ", x.size())
         x_mha = self.MultiHeadAttention(x)
-        print("X_MHA: ", x.size())
         x = self.LayerNorm1(x + x_mha)
-        print("X_INTER: ", x.size())
         x_ff = self.FeedForward(x)
-        print("X_FF: ", x_ff.size())
         x = self.LayerNorm2(x + x_ff)
-        print("X_FINISH: ", x.size())
         return x
 
 
