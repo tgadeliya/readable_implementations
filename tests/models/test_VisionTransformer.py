@@ -40,7 +40,9 @@ def model(patch_size, num_patches, hidden_size, num_labels):
 
 class TestVisualTransformer:
     def test_happy_path(self, model, image_batch_patched):
-        model(image_batch_patched)
+        out = model(image_batch_patched)
+        loss = out
+        loss.backward()
 
     def test_output(self, model, image_batch_patched, batch_size, num_labels):
         out = model(image_batch_patched)
