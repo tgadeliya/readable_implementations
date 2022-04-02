@@ -47,8 +47,7 @@ class VisionTransformer(nn.Module):
         inp = self.encoder(inp)
         # TODO: Add different representations aggregation
         inp = inp[:, 0, :]  # choose only [CLS] token
-        inp = self.mlp_head(inp)
-        return inp
+        return self.mlp_head(inp)
 
 
     def to_patches(self, inp):
