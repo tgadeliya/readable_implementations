@@ -77,10 +77,10 @@ class Softmax(Module):
         self.dim: int = dim
 
     def forward(self, x: Tensor) -> Tensor:
-        x = torch.exp(x)
-        sum = x.sum(dim=self.dim)
-        x /= sum.unsqueeze(self.dim)
-        return x
+        x_out = torch.exp(x)
+        sum = x_out.sum(dim=self.dim)
+        x_out = x_out / sum.unsqueeze(self.dim)
+        return x_out
 
 
 def init_kaiming(t, mode="fan_in"):

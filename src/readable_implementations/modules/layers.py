@@ -46,7 +46,7 @@ class TransformerEncoderBlock(Module):
 
 class TransformerDecoderBlock(Module):
     def __init__(self):
-        self.MaskedMultiHeadAttention = MultiHeadAttention(is_masked=T)
+        self.MaskedMultiHeadAttention = MultiHeadAttention(is_masked=True)
         self.MultiHeadAttention = MultiHeadAttention()
         self.LayerNorm1 = LayerNorm()
         self.FeedForward = TransformerFeedForward()

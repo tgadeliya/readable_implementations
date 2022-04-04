@@ -56,7 +56,7 @@ class CIFAR10(Dataset):
         labels = list(chain.from_iterable(labels))
         # stack and reshape into image, where dims are N x (C x H x W)
         data_files = np.vstack(data_files).reshape(-1, 3, 32, 32)
-        # data_files = torch.Tensor(data_files)
+        data_files = torch.Tensor(data_files)
 
         meta_file_path = dir_path.joinpath("batches.meta")
         label_names = [
