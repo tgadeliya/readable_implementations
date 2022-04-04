@@ -35,17 +35,17 @@ class TestCIFAR10:
         example = dataset.__getitem__(0)
 
         assert len(dataset) == 50000
-        assert example.keys() == set(["image", "label"])
+        assert example.keys() == set(["input", "target"])
 
     def test_image_output(self, dataset):
         example = dataset.__getitem__(0)
 
-        assert isinstance(example['image'], torch.Tensor)
-        assert example["image"].size() == (3, 32, 32)
+        assert isinstance(example['input'], torch.Tensor)
+        assert example["input"].size() == (3, 32, 32)
 
     def test_dataloading(self, dataset):
         dataloader = DataLoader(dataset, batch_size=5)
         batch = next(iter(dataloader))
 
-        assert batch["image"].size() == (5, 3, 32, 32)
+        assert batch["input"].size() == (5, 3, 32, 32)
 

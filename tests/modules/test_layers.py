@@ -1,3 +1,4 @@
+import torch
 from torch import rand
 
 import pytest
@@ -50,11 +51,17 @@ def encoder(num_heads, num_blocks):
 class TestTransformerEncoderBlock:
     def test_happy_path(self, inp, encoder_block):
         out = encoder_block(inp)
+        true = torch.rand_like(out)
+        loss = (true - out).mean()
+        loss.backward()
+
+    def test_output(self, inp, encoder_block):
+        out = encoder_block(inp)
         assert out.size() == inp.size()
+
 
 
 class TestTransformerEncoder:
     def test_happy_path(self, inp, encoder):
         out = encoder(inp)
-
         assert out.size() == inp.size()
