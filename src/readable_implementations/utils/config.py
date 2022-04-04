@@ -8,6 +8,7 @@ from torch.optim import Adam, Optimizer
 @dataclass
 class BasicConfig:
     device: str
+    log_every: int
     optimizer: Optimizer
     model: nn.Module
     loss_fn: nn.Module

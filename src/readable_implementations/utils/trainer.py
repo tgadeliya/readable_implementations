@@ -65,7 +65,7 @@ class Trainer:
 
         self.writer = SummaryWriter()
         self.global_step = 0
-        self.log_every = 500
+        self.log_every = config.log_every
 
         self.val_step = validation_step
 
