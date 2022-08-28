@@ -1,1 +1,1 @@
-from .models import VisionTransformer
+from .models import VisionTransformer, Transformer

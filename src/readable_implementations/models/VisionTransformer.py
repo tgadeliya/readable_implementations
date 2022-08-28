@@ -23,7 +23,7 @@ class VisionTransformer(nn.Module):
     ):
         super().__init__()
         self.patch_size = patch_size
-        self.num_patches = 1 + num_patches   # [CLS] + Image patches tokens
+        self.num_patches = 1 + num_patches  # [CLS] + Image patches tokens
         self.embeddings = EmbeddingPatches(
             patch_size=patch_size, num_patches=self.num_patches, hidden_size=hidden_size
         )
@@ -48,7 +48,6 @@ class VisionTransformer(nn.Module):
         # TODO: Add different representations aggregation
         inp = inp[:, 0, :]  # choose only [CLS] token
         return self.mlp_head(inp)
-
 
     def to_patches(self, inp):
         """

@@ -8,7 +8,7 @@ class MultiHeadAttention(Module):
         self,
         d_key: int = 64,
         d_value: int = 64,
-        d_model: int = 512,
+        d_model: int = 758,
         max_len: int = 512,
         n_heads: int = 8,
         is_masked: bool = False,
@@ -35,19 +35,20 @@ class MultiHeadAttention(Module):
         self.softmax = Softmax(dim=-1)
         self.final_linear = Linear(self.d_v * self.n_heads, d_model)
 
-        # TODO: Why we can't precalculate mask on every step instead of max_len
-        attention_mask = torch.triu(torch.ones(max_len, max_len), diagonal=1)
-        # We don't want to optimize mask
-        self.register_buffer("mask", attention_mask)
+        # # TODO: Why we can't precalculate mask on every step instead of max_len
+        # attention_mask = torch.triu(torch.ones(max_len, max_len), diagonal=1)
+        # # We don't want to optimize mask
+        # self.register_buffer("mask", attention_mask)
 
-    def forward(self, x):
+    def forward(self, v, k, q):
+        bs, max_len, d_model = v.size()
+        assert (
+            d_model == self.d_model
+        ), f"Input emb ({d_model}) and attention emb ({self.d_model}) aren't compatible"
 
-        bs, max_len, d_model = x.size()
-        assert d_model == self.d_model, "Input emb and attention emb aren't compatible"
-
-        Q = self.Q_proj(x).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
-        K = self.K_proj(x).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
-        V = self.V_proj(x).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
+        Q = self.Q_proj(q).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
+        K = self.K_proj(k).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
+        V = self.V_proj(v).view(bs, max_len, self.n_heads, self.d_k).transpose(1, 2)
 
         Q_K = torch.matmul(Q, torch.transpose(K, -1, -2))
         # scale
@@ -55,7 +56,8 @@ class MultiHeadAttention(Module):
         # add masked attention
         if self.is_masked:
             # self.mask will be broadcasted for scores
-            Q_K.masked_fill_(self.mask, float("-inf"))
+            attention_mask = torch.triu(torch.ones(max_len, max_len), diagonal=1)
+            Q_K.masked_fill_(attention_mask, float("-inf"))
 
         # softmax
         scores = self.softmax(Q_K)

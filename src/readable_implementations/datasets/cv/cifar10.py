@@ -20,7 +20,9 @@ class CIFAR10(Dataset):
 
     INTERNAL_PATH_TO_FILES = "../../../../res/data/cifar-10-batches-py"
 
-    def __init__(self, path_to_dir: Optional[Path] = INTERNAL_PATH_TO_FILES, mode:str="train") -> None:
+    def __init__(
+        self, path_to_dir: Optional[Path] = INTERNAL_PATH_TO_FILES, mode: str = "train"
+    ) -> None:
         # TODO: Add normalization option
         self.mode = mode
         path_to_dir = Path(path_to_dir)
