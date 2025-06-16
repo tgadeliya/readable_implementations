@@ -3,6 +3,7 @@ import torch
 
 from readable_implementations.modules import MultiHeadAttention
 
+
 class TestMHA:
     def test_happy_path(self):
         torch.autograd.set_detect_anomaly(True)

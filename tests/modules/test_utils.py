@@ -1,12 +1,18 @@
 import pytest
 import torch
 
-from readable_implementations.modules.utils import Linear, TransformerFeedForward, LayerNorm, ReLU, Softmax
+from readable_implementations.modules.utils import (
+    Linear,
+    TransformerFeedForward,
+    LayerNorm,
+    ReLU,
+    Softmax,
+)
 
 
 class TestLinear:
     def test_happy_path(self):
-        in_dim , out_dim = 10, 5
+        in_dim, out_dim = 10, 5
         lin = Linear(in_dim, out_dim)
         inp = torch.rand(4, 5, in_dim, requires_grad=True)
         out = lin(inp)
@@ -18,7 +24,7 @@ class TestLinear:
 
 class TestFeedForward:
     def test_happy_path(self):
-        in_dim , out_dim = 10, 5
+        in_dim, out_dim = 10, 5
         ff = TransformerFeedForward(in_dim, out_dim, hidden=200)
         inp = torch.rand(4, 5, in_dim, requires_grad=True)
         out = ff(inp)
@@ -28,7 +34,7 @@ class TestFeedForward:
 
 class TestLayerNorm:
     def test_happy_path(self):
-        bs , max_len, d_model = 3, 128, 768
+        bs, max_len, d_model = 3, 128, 768
 
         ln = LayerNorm(d_model)
         inp = torch.rand(bs, max_len, d_model, requires_grad=True)
@@ -37,9 +43,10 @@ class TestLayerNorm:
         loss = out.mean()
         loss.backward()
 
+
 class TestReLU:
     def test_happy_path(self):
-        bs , max_len, d_model = 3, 128, 768
+        bs, max_len, d_model = 3, 128, 768
 
         relu = ReLU()
         inp = torch.rand(bs, max_len, d_model, requires_grad=True)
@@ -48,9 +55,10 @@ class TestReLU:
         loss = out.mean()
         loss.backward()
 
+
 class TestSoftmax:
     def test_happy_path(self):
-        bs , max_len, d_model = 3, 128, 768
+        bs, max_len, d_model = 3, 128, 768
 
         softmax = Softmax(dim=-1)
         inp = torch.rand(bs, max_len, d_model, requires_grad=True)

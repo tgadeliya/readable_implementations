@@ -60,7 +60,6 @@ class TestTransformerEncoderBlock:
         assert out.size() == inp.size()
 
 
-
 class TestTransformerEncoder:
     def test_happy_path(self, inp, encoder):
         out = encoder(inp)

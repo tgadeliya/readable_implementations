@@ -23,6 +23,7 @@ def hidden_size():
 def num_patches():
     return 4
 
+
 @pytest.fixture()
 def num_labels():
     return 10
@@ -35,7 +36,12 @@ def image_batch_patched(batch_size, patch_size, num_patches, hidden_size):
 
 @pytest.fixture()
 def model(patch_size, num_patches, hidden_size, num_labels):
-    return VisionTransformer( num_labels= num_labels,patch_size=patch_size,hidden_size=hidden_size, num_patches=num_patches)
+    return VisionTransformer(
+        num_labels=num_labels,
+        patch_size=patch_size,
+        hidden_size=hidden_size,
+        num_patches=num_patches,
+    )
 
 
 class TestVisualTransformer:

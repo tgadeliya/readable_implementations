@@ -11,6 +11,7 @@ from readable_implementations.utils.config import BasicConfig
 logger = logging.getLogger("train")
 logging.basicConfig(level=logging.INFO)
 
+
 def validation_step(model, val_dataloader, loss_fn, step_idx, device):
     val_loss = 0.0
 
@@ -79,9 +80,7 @@ class Trainer:
         for epoch in range(self.max_epochs):
             self.train_one_epoch(epoch)
 
-    def train_one_epoch(
-        self, epoch_idx: int
-    ):
+    def train_one_epoch(self, epoch_idx: int):
         loss_per_logging = 0
         for idx, batch in enumerate(tqdm(self.train_dataloader, f" Epoch {epoch_idx}")):
             self.global_step += self.batch_size
@@ -94,8 +93,12 @@ class Trainer:
                 self.validate()
 
             if idx % self.log_every == (self.log_every - 1):
-                loss_per_logging_mean = loss_per_logging / (self.log_every * self.batch_size)
-                self.writer.add_scalar("train/loss", loss_per_logging_mean, self.global_step)
+                loss_per_logging_mean = loss_per_logging / (
+                    self.log_every * self.batch_size
+                )
+                self.writer.add_scalar(
+                    "train/loss", loss_per_logging_mean, self.global_step
+                )
                 with logging_redirect_tqdm():
                     progress = idx / len(self.train_dataloader) * 100
                     logger.info(

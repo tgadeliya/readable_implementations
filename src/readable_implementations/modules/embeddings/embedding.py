@@ -9,12 +9,14 @@ from .utils import init_positional_embeddings
 
 class Embeddings(Module):
     def __init__(self, d_emb, vocab_size, max_model_len) -> None:
-        super(Embeddings, self).__init__()
+        super().__init__()
         self.d_emb = d_emb
         self.max_model_len = max_model_len
         # TODO: Add normal distribution initialization
         self.emb_matrix = Parameter(torch.zeros(size=(vocab_size, d_emb)))
+
         # precompute all positional encodings up to maximal possible len
+        # TODO: split up positional encoding and Embeddings
         self.pos_enc_max = Parameter(
             init_positional_embeddings(max_model_len, d_emb), requires_grad=False
         )

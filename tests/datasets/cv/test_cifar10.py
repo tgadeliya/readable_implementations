@@ -40,7 +40,7 @@ class TestCIFAR10:
     def test_image_output(self, dataset):
         example = dataset.__getitem__(0)
 
-        assert isinstance(example['input'], torch.Tensor)
+        assert isinstance(example["input"], torch.Tensor)
         assert example["input"].size() == (3, 32, 32)
 
     def test_dataloading(self, dataset):
@@ -48,4 +48,3 @@ class TestCIFAR10:
         batch = next(iter(dataloader))
 
         assert batch["input"].size() == (5, 3, 32, 32)
-
